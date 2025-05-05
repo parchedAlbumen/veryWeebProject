@@ -10,27 +10,6 @@ import (
 	"github.com/parchedAlbumen/veryWeebProject/apiFolder"
 )
 
-type Manga struct {
-	Title    string `json:"title"`
-	Synopsis string `json:"synopsis"`
-	Chapters int    `json:"chapters"`
-}
-
-type MangaData struct {
-	Data []Manga `json:"data"` //shit is a slice? ?? ? ? ?
-}
-
-// type Anime struct {
-//     Title    string `json:"title"`
-//     Synopsis string `json:"synopsis"`
-//     URL      string `json:"url"`
-//     ID       int    `json:"mal_id"`
-// }
-
-// type SearchResponse struct {
-//     Data []Anime `json:"data"` //variable data with datatype off slice Anime
-// }
-
 func getRoot(w http.ResponseWriter, r *http.Request) {
 	fmt.Printf("got / request\n")
 	io.WriteString(w, "This is my website!\n")
@@ -43,7 +22,10 @@ func getHello(w http.ResponseWriter, r *http.Request) {
 
 func getNaruto(w http.ResponseWriter, r *http.Request) {
 	fmt.Printf("got /getNaruto request\n")
-	io.WriteString(w, "I am supposed to send the naruto jikan api data here xd\n")
+	var data apiFolder.MangaData
+	var info string = apiFolder.DoSomething(&data)
+	fmt.Println("from server", info)
+	io.WriteString(w, info)
 }
 
 func main() {
@@ -58,6 +40,4 @@ func main() {
 		fmt.Printf("error starting server: %s\n", err)
 		os.Exit(1)
 	}
-
-	apiFolder.Hello()
 }
