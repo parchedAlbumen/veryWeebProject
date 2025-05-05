@@ -41,3 +41,5 @@ func main() {
 		os.Exit(1)
 	}
 }
+
+//next plan is to expand on the stuff I want to do with the manga jikan api calls and then finally start with the gui
