@@ -20,8 +20,8 @@ type MangaData struct {
 func getRec(data []Manga) string {
 	if len(data) > 0 {
 		first := data[0]
-		fmt.Println("from api:", first.Title)
-		return first.Title + "\n"
+		fmt.Println("giving user informations")
+		return first.Title + " " + first.Synopsis + "\n"
 	} else {
 		return "No manga exist with this name bruh\n"
 	}
@@ -30,13 +30,13 @@ func getRec(data []Manga) string {
 func DoSomething(data *MangaData) string {
 	resp, err := http.Get("https://api.jikan.moe/v4/anime?q=naruto")
 	if err == nil {
-		fmt.Println("Error:", err)
+		fmt.Println("(1)Error:", err)
 	}
 	defer resp.Body.Close()
 
 	body, err := io.ReadAll(resp.Body)
 	if err == nil {
-		fmt.Println("Error:", err)
+		fmt.Println("(2)Error:", err)
 	}
 
 	json.Unmarshal(body, &data)
