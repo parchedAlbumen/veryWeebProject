@@ -8,6 +8,7 @@ import (
 	"os"
 
 	"github.com/parchedAlbumen/veryWeebProject/apiFolder"
+	"github.com/parchedAlbumen/veryWeebProject/utilFolder"
 )
 
 func getRoot(w http.ResponseWriter, r *http.Request) {
@@ -20,11 +21,18 @@ func getHello(w http.ResponseWriter, r *http.Request) {
 	io.WriteString(w, "Hello, HTTP\n")
 }
 
+func holdOn(w http.ResponseWriter, r *http.Request) {
+	theManga := utilFolder.AskForMangaName()
+	sentence := "The manga mentioned: " + theManga
+	fmt.Println(sentence)
+	io.WriteString(w, sentence)
+}
+
 func getNaruto(w http.ResponseWriter, r *http.Request) {
 	fmt.Printf("got /getNaruto request\n")
 	var data apiFolder.MangaData
 	var info string = apiFolder.DoSomething(&data)
-	fmt.Println("from server", info)
+	fmt.Println("from server:", info)
 	io.WriteString(w, info)
 }
 
@@ -32,6 +40,7 @@ func main() {
 	http.HandleFunc("/", getRoot)
 	http.HandleFunc("/hello", getHello)
 	http.HandleFunc("/naruto", getNaruto)
+	http.HandleFunc("/wassup", holdOn)
 
 	err := http.ListenAndServe(":3333", nil)
 	if errors.Is(err, http.ErrServerClosed) {
