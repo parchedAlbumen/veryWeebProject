@@ -8,7 +8,6 @@ import (
 	"os"
 
 	"github.com/parchedAlbumen/veryWeebProject/apiFolder"
-	"github.com/parchedAlbumen/veryWeebProject/utilFolder"
 )
 
 func getRoot(w http.ResponseWriter, r *http.Request) {
@@ -22,8 +21,9 @@ func getHello(w http.ResponseWriter, r *http.Request) {
 }
 
 func holdOn(w http.ResponseWriter, r *http.Request) {
-	theManga := utilFolder.AskForMangaName()
-	sentence := "The manga mentioned: " + theManga
+	io.WriteString(w, "What manga would you like to look at? (make sure if you want to type with spaces,, instead of spaces use dashes, '-'")
+	var manga string = ""
+	sentence := "The manga mentioned: " + manga
 	fmt.Println(sentence)
 	io.WriteString(w, sentence)
 }

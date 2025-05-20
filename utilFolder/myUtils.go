@@ -4,12 +4,13 @@ import (
 	"fmt"
 )
 
-func AskForMangaName() string {
-	var manga string = ""
-	fmt.Println("What manga would you like to look at? (make sure if you want to type with spaces,, instead of spaces use dashes, '-'")
-	fmt.Scanln(&manga) //gets user input lol
-	return manga
-}
+//-- completely useless because I am supposed to be asking the client lol
+// func AskForMangaName() string {
+// 	var manga string = ""
+// 	fmt.Println("What manga would you like to look at? (make sure if you want to type with spaces,, instead of spaces use dashes, '-'")
+// 	fmt.Scanln(&manga) //gets user input lol
+// 	return manga
+// }
 
 func AskPlan() {
 	fmt.Println("Okay so what would you like to do?")
