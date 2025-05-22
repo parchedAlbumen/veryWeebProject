@@ -17,9 +17,10 @@ type MangaData struct {
 	Data []Manga `json:"data"`
 }
 
-func getRec(data []Manga) string {
-	if len(data) > 0 {
-		first := data[0]
+func getRec(manga []Manga) string {
+	// getManga(data, name)
+	if len(manga) > 0 {
+		first := manga[0]
 		fmt.Println("giving user informations")
 		return first.Title + " " + first.Synopsis + "\n"
 	} else {
@@ -27,19 +28,30 @@ func getRec(data []Manga) string {
 	}
 }
 
-func DoSomething(data *MangaData) string {
-	resp, err := http.Get("https://api.jikan.moe/v4/anime?q=naruto")
-	if err == nil {
+func GiveSynopsis(data *MangaData, name string) string {
+	theManga := getManga(data, name)
+	if len(theManga) > 0 {
+		first := theManga[0]
+		return first.Title + "\n" + first.Synopsis + "\n"
+	} else {
+		return "lol xd\n"
+	}
+}
+
+func getManga(data *MangaData, name string) []Manga {
+	theName := "https://api.jikan.moe/v4/anime?q=" + name
+	resp, err := http.Get(theName)
+	if err != nil {
 		fmt.Println("(1)Error:", err)
 	}
 	defer resp.Body.Close()
 
 	body, err := io.ReadAll(resp.Body)
-	if err == nil {
+	if err != nil {
 		fmt.Println("(2)Error:", err)
 	}
 
 	json.Unmarshal(body, &data)
 
-	return getRec(data.Data)
+	return data.Data
 }

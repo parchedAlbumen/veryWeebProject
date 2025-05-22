@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
@@ -8,8 +9,11 @@ import (
 	"os"
 
 	"github.com/parchedAlbumen/veryWeebProject/apiFolder"
-	"github.com/parchedAlbumen/veryWeebProject/utilFolder"
 )
+
+type MangaName struct {
+	MangaName string `json:"mangaName"`
+}
 
 func getRoot(w http.ResponseWriter, r *http.Request) {
 	fmt.Printf("got / request\n")
@@ -22,25 +26,25 @@ func getHello(w http.ResponseWriter, r *http.Request) {
 }
 
 func holdOn(w http.ResponseWriter, r *http.Request) {
-	theManga := utilFolder.AskForMangaName()
-	sentence := "The manga mentioned: " + theManga
-	fmt.Println(sentence)
-	io.WriteString(w, sentence)
-}
+	if r.Method == "POST" {
+		var name MangaName
+		err := json.NewDecoder(r.Body).Decode(&name)
+		if err != nil {
+			fmt.Println("Error decoding JSON:", err)
+			return
+		}
 
-func getNaruto(w http.ResponseWriter, r *http.Request) {
-	fmt.Printf("got /getNaruto request\n")
-	var data apiFolder.MangaData
-	var info string = apiFolder.DoSomething(&data)
-	fmt.Println("from server:", info)
-	io.WriteString(w, info)
+		fmt.Println(name.MangaName, "porno")
+		var data apiFolder.MangaData
+		var info string = apiFolder.GiveSynopsis(&data, name.MangaName)
+		io.WriteString(w, info+"\n"+name.MangaName)
+	}
 }
 
 func main() {
 	http.HandleFunc("/", getRoot)
 	http.HandleFunc("/hello", getHello)
-	http.HandleFunc("/naruto", getNaruto)
-	http.HandleFunc("/wassup", holdOn)
+	http.HandleFunc("/skibidiRizzlerSigmaMale", holdOn)
 
 	err := http.ListenAndServe(":3333", nil)
 	if errors.Is(err, http.ErrServerClosed) {

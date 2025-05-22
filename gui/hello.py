@@ -1,4 +1,6 @@
 import tkinter 
+import requests
+import json
 
 #tryna see if I can just make a fixed size window
 fixed_width = 1000
@@ -10,14 +12,16 @@ manga_var = tkinter.StringVar()
 
 def submitAction():
     mangaName = manga_var.get()
-    print(f"the name of the manga is: {mangaName}")
-    manga_var.set("")
+    print(f"mangaName: {mangaName}")
+    manga_var.set("") #hopefully self-explanatory 
     
+#focus on this shit first
 def getRecommendation():
-    mangaName = manga_var.get()
-    #go call the thing here
-    #result = whatever the response is here
-    return "the recommendation here"
+    dataName = {"mangaName": manga_var.get()}
+
+    response = requests.post("http://localhost:3333/skibidiRizzlerSigmaMale", json=dataName)
+    print("Response from the lebron server:", response.text)
+    # manga_var.set("")
 
 def getSynopsis():
     mangaName = manga_var.get()
