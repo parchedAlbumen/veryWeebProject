@@ -39,7 +39,7 @@ func GiveSynopsis(data *MangaData, name string) string {
 }
 
 func getManga(data *MangaData, name string) []Manga {
-	theName := "https://api.jikan.moe/v4/anime?q=" + name
+	theName := "https://api.jikan.moe/v4/manga?q=" + name
 	resp, err := http.Get(theName)
 	if err != nil {
 		fmt.Println("(1)Error:", err)
