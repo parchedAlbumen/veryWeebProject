@@ -5,6 +5,7 @@ import json
 #tryna see if I can just make a fixed size window
 fixed_width = 1000
 fixed_height = 800 
+init_msg = "type a manga,,, press one of the buttons,,, see what you get!"
 
 root = tkinter.Tk() 
 
@@ -16,17 +17,18 @@ def submitAction():
     manga_var.set("") #hopefully self-explanatory 
     
 #focus on this shit first
-def getRecommendation():
+def getSynopsis():
     dataName = {"mangaName": manga_var.get()}
 
     response = requests.post("http://localhost:3333/skibidiRizzlerSigmaMale", json=dataName)
     print("Response from the lebron server:", response.text)
-    # manga_var.set("")
+    manga_var.set("")
+    msg.config(text=response.text)
 
-def getSynopsis():
+def getRecommendation():
     mangaName = manga_var.get()
     #go call the thing here
-    #synopsis = whatever the response is here
+    #recommendation = whatever the response is here
     return "the synopsis"
 
 #geometry is used for setting the window sized automatically
@@ -43,12 +45,14 @@ manga_entry = tkinter.Entry(root, textvariable=manga_var)
 get_rec_button = tkinter.Button(root, text="Get Recommendation", command=getRecommendation)
 get_synopsis = tkinter.Button(root, text="Get Synopsis", command=getSynopsis)
 
+#make the message thing here
+msg = tkinter.Label(root, text=init_msg, wraplength=300) 
+
 #the grid stuff, basically how its set up
 manga_name.grid(row=0,column=0)
 manga_entry.grid(row=0,column=1)
 get_rec_button.grid(row=1,column=0)
 get_synopsis.grid(row=1,column=1)
+msg.grid(row=0, column=3,padx=100)
 
 root.mainloop()
-
-#see if this only updates in skib branch

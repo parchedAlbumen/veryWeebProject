@@ -36,7 +36,7 @@ func holdOn(w http.ResponseWriter, r *http.Request) {
 
 		fmt.Println(name.MangaName, "porno")
 		var data apiFolder.MangaData
-		var info string = apiFolder.GiveSynopsis(&data, name.MangaName)
+		var info string = apiFolder.GetSynopsis(&data, name.MangaName)
 		io.WriteString(w, info+"\n"+name.MangaName)
 	}
 }
