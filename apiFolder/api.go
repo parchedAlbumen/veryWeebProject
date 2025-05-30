@@ -58,19 +58,15 @@ func GetMangaScore(data *MangaData, name string) string {
 	if id := getMangaId(data, name); id > 0 {
 		httpreq := "https://api.jikan.moe/v4/manga/" + strconv.Itoa(id) + "/statistics"
 		var scoreData MangaScoreData
-		dataInfo := getScoreStatistic(httpreq, &scoreData)
-		if len(dataInfo.Scores) > 0 {
-			infoFormat := ""
-			fmt.Println(infoFormat)
-			infoFormat += ("Completed: " + strconv.Itoa(dataInfo.Completed) + "\n")
-			infoFormat += ("Total: " + strconv.Itoa(dataInfo.Total) + "\n")
-			mangaScores := dataInfo.Scores[0]
-			infoFormat += ("Votes: " + strconv.Itoa(mangaScores.Votes) + "\n")
-			infoFormat += ("Percentages: " + strconv.Itoa(mangaScores.Percentage) + "%\n")
-			return infoFormat
-		} else {
-			return "no info what the!"
-		}
+		dataInfo := getScoreStatistic(httpreq, &scoreData) //no need to check if exist or not,, because we can only get something if there's an id
+		infoFormat := ""
+		fmt.Println(infoFormat)
+		infoFormat += ("Completed: " + strconv.Itoa(dataInfo.Completed) + "\n")
+		infoFormat += ("Total: " + strconv.Itoa(dataInfo.Total) + "\n")
+		mangaScores := dataInfo.Scores[0]
+		infoFormat += ("Votes: " + strconv.Itoa(mangaScores.Votes) + "\n")
+		infoFormat += ("Percentages: " + strconv.Itoa(mangaScores.Percentage) + "%\n")
+		return infoFormat
 	} else {
 		return "bad at getMangaScore"
 	}
