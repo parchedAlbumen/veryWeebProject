@@ -15,6 +15,21 @@ type MangaName struct {
 	MangaName string `json:"mangaName"`
 }
 
+func getScore(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "POST" {
+		var name MangaName
+		err := json.NewDecoder(r.Body).Decode(&name)
+		if err != nil {
+			fmt.Println("Error decoding JSON:", err)
+			return
+		}
+
+		var mangaData apiFolder.MangaData
+		var info string = apiFolder.GetMangaScore(&mangaData, name.MangaName)
+		io.WriteString(w, info+"\n")
+	}
+}
+
 func getRoot(w http.ResponseWriter, r *http.Request) {
 	fmt.Printf("got / request\n")
 	io.WriteString(w, "This is my website!\n")
@@ -27,14 +42,13 @@ func getHello(w http.ResponseWriter, r *http.Request) {
 
 func holdOn(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
-		var name MangaName
+		var name MangaName //from request
 		err := json.NewDecoder(r.Body).Decode(&name)
 		if err != nil {
 			fmt.Println("Error decoding JSON:", err)
 			return
 		}
 
-		fmt.Println(name.MangaName, "porno")
 		var data apiFolder.MangaData
 		var info string = apiFolder.GetSynopsis(&data, name.MangaName)
 		io.WriteString(w, info+"\n"+name.MangaName)
@@ -45,6 +59,7 @@ func main() {
 	http.HandleFunc("/", getRoot)
 	http.HandleFunc("/hello", getHello)
 	http.HandleFunc("/skibidiRizzlerSigmaMale", holdOn)
+	http.HandleFunc("/getScore", getScore)
 
 	err := http.ListenAndServe(":3333", nil)
 	if errors.Is(err, http.ErrServerClosed) {
@@ -54,5 +69,3 @@ func main() {
 		os.Exit(1)
 	}
 }
-
-//next plan is to expand on the stuff I want to do with the manga jikan api calls and then finally start with the gui
