@@ -46,8 +46,7 @@ func GetRec(manga []Manga) string {
 }
 
 func GetSynopsis(data *MangaData, name string) string {
-	theManga := getManga(data, name)
-	if len(theManga) > 0 {
+	if theManga := getManga(data, name); len(theManga) > 0 {
 		first := theManga[0]
 		return first.Title + "\n" + first.Synopsis + "\n"
 	} else {
@@ -94,8 +93,7 @@ func getScoreStatistic(theReq string, data *MangaScoreData) ScoreData {
 }
 
 func getMangaId(data *MangaData, name string) int {
-	theManga := getManga(data, name)
-	if len(theManga) > 0 {
+	if theManga := getManga(data, name); len(theManga) > 0 {
 		first := theManga[0]
 		return first.Id
 	} else {
