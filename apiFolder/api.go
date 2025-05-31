@@ -1,5 +1,7 @@
 package apiFolder
 
+//main file basically
+
 import (
 	"encoding/json"
 	"fmt"
@@ -7,33 +9,6 @@ import (
 	"net/http"
 	"strconv"
 )
-
-type Manga struct {
-	Title    string `json:"title"`
-	Synopsis string `json:"synopsis"`
-	Chapters int    `json:"chapters"`
-	Id       int    `json:"mal_id"`
-}
-
-type MangaData struct {
-	Data []Manga `json:"data"` //this is a slice of object: Manga
-}
-
-type MangaScore struct {
-	Score      int `json:"score"`
-	Votes      int `json:"votes"`
-	Percentage int `json:"percentage"`
-}
-
-type ScoreData struct {
-	Completed int          `json:"completed"`
-	Total     int          `json:total"`
-	Scores    []MangaScore `json:scores"` //this is a slice of object: MangaScore
-}
-
-type MangaScoreData struct {
-	Data ScoreData `json:"data"`
-}
 
 func GetRec(manga []Manga) string {
 	if len(manga) > 0 {
@@ -62,10 +37,10 @@ func GetMangaScore(data *MangaData, name string) string {
 		infoFormat := ""
 		fmt.Println(infoFormat)
 		infoFormat += ("Completed: " + strconv.Itoa(dataInfo.Completed) + "\n")
-		infoFormat += ("Total: " + strconv.Itoa(dataInfo.Total) + "\n")
-		mangaScores := dataInfo.Scores[0]
-		infoFormat += ("Votes: " + strconv.Itoa(mangaScores.Votes) + "\n")
-		infoFormat += ("Percentages: " + strconv.Itoa(mangaScores.Percentage) + "%\n")
+		infoFormat += ("Total Users: " + strconv.Itoa(dataInfo.Total) + "\n")
+		averageRating := calculateAverageRating(dataInfo)
+		infoFormat += ("Current Rating: " + strconv.FormatFloat(averageRating, 'f', 2, 64))
+		infoFormat += ("Percentage of people that dropped it: ")
 		return infoFormat
 	} else {
 		return "bad at getMangaScore"
@@ -73,7 +48,6 @@ func GetMangaScore(data *MangaData, name string) string {
 }
 
 func getScoreStatistic(theReq string, data *MangaScoreData) ScoreData {
-	fmt.Println(theReq + "lol")
 	resp, err := http.Get(theReq)
 	if err != nil {
 		fmt.Println(err)
