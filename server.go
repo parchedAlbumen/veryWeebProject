@@ -18,8 +18,7 @@ type MangaName struct {
 func getScore(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
 		var name MangaName
-		err := json.NewDecoder(r.Body).Decode(&name)
-		if err != nil {
+		if err := json.NewDecoder(r.Body).Decode(&name); err != nil {
 			fmt.Println("Error decoding JSON:", err)
 			return
 		}
@@ -43,8 +42,7 @@ func getHello(w http.ResponseWriter, r *http.Request) {
 func holdOn(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
 		var name MangaName //from request
-		err := json.NewDecoder(r.Body).Decode(&name)
-		if err != nil {
+		if err := json.NewDecoder(r.Body).Decode(&name); err != nil {
 			fmt.Println("Error decoding JSON:", err)
 			return
 		}
@@ -61,8 +59,7 @@ func main() {
 	http.HandleFunc("/skibidiRizzlerSigmaMale", holdOn)
 	http.HandleFunc("/getScore", getScore)
 
-	err := http.ListenAndServe(":3333", nil)
-	if errors.Is(err, http.ErrServerClosed) {
+	if err := http.ListenAndServe(":3333", nil); errors.Is(err, http.ErrServerClosed) {
 		fmt.Printf("server closed\n")
 	} else if err != nil {
 		fmt.Printf("error starting server: %s\n", err)
