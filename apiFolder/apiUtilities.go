@@ -10,3 +10,8 @@ func calculateAverageRating(info ScoreData) float64 {
 	}
 	return float64(sum) / float64(total)
 }
+
+func generateScoreFormat(info ScoreData) string {
+	//do some magic here lol
+	return "hello!"
+}
