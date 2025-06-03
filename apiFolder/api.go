@@ -35,6 +35,7 @@ func GetMangaScore(data *MangaData, name string) string {
 		var scoreData MangaScoreData
 		dataInfo := getScoreStatistic(httpreq, &scoreData) //no need to check if exist or not,, because we can only get something if there's an id
 		infoFormat := ""
+		generateScoreFormat(dataInfo)
 		fmt.Println(infoFormat)
 		infoFormat += ("Completed: " + strconv.Itoa(dataInfo.Completed) + "\n")
 		infoFormat += ("Total Users: " + strconv.Itoa(dataInfo.Total) + "\n")
@@ -58,7 +59,7 @@ func getScoreStatistic(theReq string, data *MangaScoreData) ScoreData {
 	if err != nil {
 		fmt.Println(err)
 	}
-	json.Unmarshal(body, &data)
+	json.Unmarshal(body, data)
 	return data.Data
 }
 
@@ -70,6 +71,31 @@ func getMangaId(data *MangaData, name string) int {
 		return -1
 	}
 }
+
+func getImageURL(id int, data *Photo) string {
+	mangaImageReq := "https://api.jikan.moe/v4/manga/" + strconv.Itoa(id) + "/pictures"
+	fmt.Println(mangaImageReq)
+	resp, err := http.Get(mangaImageReq)
+	if err != nil {
+		fmt.Println(err)
+	}
+	defer resp.Body.Close()
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		fmt.Print(err)
+	}
+	json.Unmarshal(body, data)
+	//check this
+	if stuff := data.Data; len(stuff) > 0 {
+		fmt.Println("i got here!")
+		first := stuff[0]
+		return first.Jpg.Large_Image
+	} else {
+		return "sad times"
+	}
+	//update this later honestly
+} //currently unusable for many reasons
 
 func getManga(data *MangaData, name string) []Manga {
 	theName := "https://api.jikan.moe/v4/manga?q=" + name
@@ -83,6 +109,8 @@ func getManga(data *MangaData, name string) []Manga {
 	if err != nil {
 		fmt.Println(err)
 	}
-	json.Unmarshal(body, &data)
+	json.Unmarshal(body, data)
 	return data.Data
 }
+
+//fix the code here so that I can also send the URL back to the python, to make use of it and show images
