@@ -12,6 +12,8 @@ init_msg = "type a manga,,, press one of the buttons,,, see what you get!"
 root = tkinter.Tk() 
 manga_var = tkinter.StringVar()
 
+root.title("Manga wowzers!")
+
 def submitAction():
     mangaName = manga_var.get()
     print(f"mangaName: {mangaName}")
@@ -22,8 +24,13 @@ def getSynopsis():
     dataName = {"mangaName": manga_var.get()}
 
     response = requests.post("http://localhost:3333/skibidiRizzlerSigmaMale", json=dataName)
-    msg.config(text=response.text)
-    getImage()
+    data = response.json()
+    #figure out why you write the json like this and understand the go part of this,, thanks a lot ken of the future    
+    print(data["response"])
+    print(data["imageurl"])
+
+    msg.config(text=data["response"])
+    getImage(data["imageurl"])
     manga_var.set("")
 
 def getScore():
@@ -33,10 +40,14 @@ def getScore():
     getImage()
     manga_var.set("")
 
+def managaResponse(theResp):
+    return "hi", "hello"
+
+
 #work on this more brah
 def getImage(url):
     print(url)
-    resp = requests.get("https://cdn.myanimelist.net/images/manga/3/55539l.jpg")
+    resp = requests.get(url)
     image = Image.open(BytesIO(resp.content))
     photo = ImageTk.PhotoImage(image)
     manga_photo.config(image=photo)  #shows the image

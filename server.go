@@ -48,8 +48,9 @@ func holdOn(w http.ResponseWriter, r *http.Request) {
 		}
 
 		var data apiFolder.MangaData
-		var info string = apiFolder.GetSynopsis(&data, name.MangaName)
-		io.WriteString(w, info+"\n"+name.MangaName)
+		info, url := apiFolder.GetSynopsis(&data, name.MangaName)
+
+		json.NewEncoder(w).Encode(apiFolder.ResponseData{Response: info, ImageUrl: url})
 	}
 }
 

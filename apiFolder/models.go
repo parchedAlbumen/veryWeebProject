@@ -44,4 +44,9 @@ type Photo struct {
 	Data []JpgPhoto `json:"data"`
 }
 
+type ResponseData struct {
+	Response string `json:"response"`
+	ImageUrl string `json:"imageurl"`
+}
+
 //get an image lol

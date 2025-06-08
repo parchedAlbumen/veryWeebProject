@@ -20,12 +20,14 @@ func GetRec(manga []Manga) string {
 	}
 }
 
-func GetSynopsis(data *MangaData, name string) string {
+func GetSynopsis(data *MangaData, name string) (string, string) {
 	if theManga := getManga(data, name); len(theManga) > 0 {
 		first := theManga[0]
-		return first.Title + "\n" + first.Synopsis + "\n"
+		var thePhoto Photo
+		url := getImageURL(first.Id, &thePhoto)
+		return first.Title + "\n" + first.Synopsis + "\n", url
 	} else {
-		return "lol xd\n"
+		return "lol xd\n", ""
 	}
 }
 
