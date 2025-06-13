@@ -1,7 +1,5 @@
 package apiFolder
 
-//main file basically
-
 import (
 	"encoding/json"
 	"fmt"
@@ -10,29 +8,51 @@ import (
 	"strconv"
 )
 
-func GetRec(manga []Manga) string {
-	if len(manga) > 0 {
-		first := manga[0]
-		fmt.Println("giving user informations")
-		return first.Title + " " + first.Synopsis + "\n"
-	} else {
-		return "No manga exist with this name bruh\n"
+func GetRecommendation(data *MangaData, name string) (string, string) {
+	if id, trash := getMangaId(data, name); id > 0 {
+		theReq := "https://api.jikan.moe/v4/manga/" + strconv.Itoa(id) + "/recommendations"
+		var recommendMangaData MangaRecommendData
+		recManga := getRecData(&recommendMangaData, theReq)
+		if len(recManga) > 0 {
+			first := recManga[0]
+			fmt.Println("Id:", strconv.Itoa(first.Entry.Id))
+			fmt.Println("URL:", first.Entry.Url)
+			fmt.Println("image:", first.Entry.Images.Jpg.Image_URL)
+			fmt.Println("title:", first.Entry.Title)
+
+			return "hi", trash
+		}
 	}
+
+	return "hi", "hello"
+}
+
+func getRecData(rec *MangaRecommendData, url string) []RecommendData {
+	resp, err := http.Get(url)
+	if err != nil {
+		fmt.Println(err)
+	}
+	defer resp.Body.Close() //defer makes sure resp (http connection) closes no matter what, in order to avoid leaks
+
+	body, err := io.ReadAll(resp.Body) // body is a byte at this point
+	if err != nil {
+		fmt.Println(err)
+	}
+	json.Unmarshal(body, rec)
+	return rec.Data
 }
 
 func GetSynopsis(data *MangaData, name string) (string, string) {
 	if theManga := getManga(data, name); len(theManga) > 0 {
 		first := theManga[0]
-		var thePhoto Photo
-		url := getImageURL(first.Id, &thePhoto)
-		return first.Title + "\n" + first.Synopsis + "\n", url
+		return first.Title + "\n" + first.Synopsis + "\n", first.Images.Jpg.Image_URL
 	} else {
 		return "lol xd\n", ""
 	}
 }
 
-func GetMangaScore(data *MangaData, name string) string {
-	if id := getMangaId(data, name); id > 0 {
+func GetMangaScore(data *MangaData, name string) (string, string) {
+	if id, image_url := getMangaId(data, name); id > 0 {
 		httpreq := "https://api.jikan.moe/v4/manga/" + strconv.Itoa(id) + "/statistics"
 		var scoreData MangaScoreData
 		dataInfo := getScoreStatistic(httpreq, &scoreData) //no need to check if exist or not,, because we can only get something if there's an id
@@ -43,10 +63,10 @@ func GetMangaScore(data *MangaData, name string) string {
 		infoFormat += ("Total Users: " + strconv.Itoa(dataInfo.Total) + "\n")
 		averageRating := calculateAverageRating(dataInfo)
 		infoFormat += ("Current Rating: " + strconv.FormatFloat(averageRating, 'f', 2, 64))
-		infoFormat += ("Percentage of people that dropped it: ")
-		return infoFormat
+		infoFormat += ("\nPercentage of people that dropped it: ")
+		return infoFormat, image_url
 	} else {
-		return "bad at getMangaScore"
+		return "No score", image_url
 	}
 }
 
@@ -65,39 +85,14 @@ func getScoreStatistic(theReq string, data *MangaScoreData) ScoreData {
 	return data.Data
 }
 
-func getMangaId(data *MangaData, name string) int {
+func getMangaId(data *MangaData, name string) (int, string) {
 	if theManga := getManga(data, name); len(theManga) > 0 {
 		first := theManga[0]
-		return first.Id
+		return first.Id, first.Images.Jpg.Image_URL
 	} else {
-		return -1
+		return -1, "no image"
 	}
 }
-
-func getImageURL(id int, data *Photo) string {
-	mangaImageReq := "https://api.jikan.moe/v4/manga/" + strconv.Itoa(id) + "/pictures"
-	fmt.Println(mangaImageReq)
-	resp, err := http.Get(mangaImageReq)
-	if err != nil {
-		fmt.Println(err)
-	}
-	defer resp.Body.Close()
-
-	body, err := io.ReadAll(resp.Body)
-	if err != nil {
-		fmt.Print(err)
-	}
-	json.Unmarshal(body, data)
-	//check this
-	if stuff := data.Data; len(stuff) > 0 {
-		fmt.Println("i got here!")
-		first := stuff[0]
-		return first.Jpg.Large_Image
-	} else {
-		return "sad times"
-	}
-	//update this later honestly
-} //currently unusable for many reasons
 
 func getManga(data *MangaData, name string) []Manga {
 	theName := "https://api.jikan.moe/v4/manga?q=" + name
@@ -114,5 +109,3 @@ func getManga(data *MangaData, name string) []Manga {
 	json.Unmarshal(body, data)
 	return data.Data
 }
-
-//fix the code here so that I can also send the URL back to the python, to make use of it and show images
