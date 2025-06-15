@@ -9,22 +9,22 @@ import (
 )
 
 func GetRecommendation(data *MangaData, name string) (string, string) {
-	if id, trash := getMangaId(data, name); id > 0 {
+	id, trashImage := getMangaId(data, name)
+	if id > 0 {
 		theReq := "https://api.jikan.moe/v4/manga/" + strconv.Itoa(id) + "/recommendations"
 		var recommendMangaData MangaRecommendData
 		recManga := getRecData(&recommendMangaData, theReq)
 		if len(recManga) > 0 {
 			first := recManga[0]
-			fmt.Println("Id:", strconv.Itoa(first.Entry.Id))
-			fmt.Println("URL:", first.Entry.Url)
+			// fmt.Println("Id:", strconv.Itoa(first.Entry.Id))
+			fmt.Println("Sending these infos:")
 			fmt.Println("image:", first.Entry.Images.Jpg.Image_URL)
 			fmt.Println("title:", first.Entry.Title)
 
-			return "hi", trash
+			return first.Entry.Title, first.Entry.Images.Jpg.Image_URL
 		}
 	}
-
-	return "hi", "hello"
+	return "hi", trashImage
 }
 
 func getRecData(rec *MangaRecommendData, url string) []RecommendData {
