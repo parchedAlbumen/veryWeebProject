@@ -21,6 +21,8 @@ from io import BytesIO
 #     updateImage(data["imageurl"])
 #     manga_var.set("")
 
+## work on this next lol
+
 # #To get score, I am going to get an LLM to summarize this, so it would seem cooler!
 # def getScore():
 #     dataName = {"mangaName": manga_var.get()}
