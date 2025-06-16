@@ -130,6 +130,14 @@ manga_photo.pack(expand=True)
 def rec_wrapper():
     gc.getRecommendation(msg_label, manga_photo, manga_var)
 
+def score_wrapper():
+    gc.getScore(msg_label, manga_photo, manga_var)  
+
+def synopsis_wrapper():
+    gc.getSynopsis(msg_label, manga_photo, manga_var)  
+
 get_rec.configure(command=rec_wrapper)
+get_score.configure(command=score_wrapper)
+get_synopsis.configure(command=synopsis_wrapper)
 
 root.mainloop()
