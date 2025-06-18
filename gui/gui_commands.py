@@ -3,6 +3,7 @@ import requests
 import json
 from PIL import Image, ImageTk
 from io import BytesIO
+import quickLLM as summarizer
 
 # #To submit action
 # def submitAction():
@@ -17,8 +18,9 @@ def getSynopsis(msg, image, search_bar):
     response = requests.post("http://localhost:3333/skibidiRizzlerSigmaMale", json=dataName) #get response
     data = response.json()
 
-    msg.config(text=data["response"]) #cuz json thingz
+
     updateImage(data["imageurl"], image)
+    summarizer.summarizeMangaSynopsis(data["response"], msg)
     search_bar.set("")
 
 # #To get score, I am going to get an LLM to summarize this, so it would seem cooler!
@@ -52,3 +54,5 @@ def updateImage(url, imageFrame):
         imageFrame.image = photo   #keeps the image alive in the manga_photo attribute, to avoid garbage collector
     else: 
         print("no images i guess")
+
+import ollama

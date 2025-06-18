@@ -1,1 +1,9 @@
+#cache
 __pycache__
+*.pyc
+
+#virtual environment
+venv/
+
+#gatekeeping for no reason
+quickLLM.py
