@@ -58,6 +58,7 @@ func getScore(w http.ResponseWriter, r *http.Request) {
 
 func getSynopsis(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
+		fmt.Println("hello world")
 		var name MangaName //from request
 		if err := json.NewDecoder(r.Body).Decode(&name); err != nil {
 			fmt.Println("Error decoding JSON:", err)

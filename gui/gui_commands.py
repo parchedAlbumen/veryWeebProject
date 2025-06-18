@@ -3,6 +3,7 @@ import requests
 import json
 from PIL import Image, ImageTk
 from io import BytesIO
+import quickLLM as summarizer
 
 # #To submit action
 # def submitAction():
@@ -10,26 +11,27 @@ from io import BytesIO
 #     print(f"mangaName: {mangaName}")
 #     manga_var.set("") #hopefully self-explanatory 
     
-# #To get a synopsis of the manga, I am going to add an LLM to get lebron james to summarize this in his own
-# def getSynopsis():
-#     dataName = {"mangaName": manga_var.get()}
+#To get a synopsis of the manga, I am going to add an LLM to get lebron james to summarize this in his own
+def getSynopsis(msg, image, search_bar):
+    dataName = {"mangaName": search_bar.get()}
 
-#     response = requests.post("http://localhost:3333/skibidiRizzlerSigmaMale", json=dataName) #get response
-#     data = response.json()
+    response = requests.post("http://localhost:3333/skibidiRizzlerSigmaMale", json=dataName) #get response
+    data = response.json()
 
-#     msg.config(text=data["response"]) #cuz json thingz
-#     updateImage(data["imageurl"])
-#     manga_var.set("")
+
+    updateImage(data["imageurl"], image)
+    summarizer.summarizeMangaSynopsis(data["response"], msg)
+    search_bar.set("")
 
 # #To get score, I am going to get an LLM to summarize this, so it would seem cooler!
-# def getScore():
-#     dataName = {"mangaName": manga_var.get()}
-#     response = requests.post("http://localhost:3333/getScore", json=dataName)
-#     data = response.json()
+def getScore(msg, image, search_bar):
+    dataName = {"mangaName": search_bar.get()}
+    response = requests.post("http://localhost:3333/getScore", json=dataName)
+    data = response.json()
 
-#     msg.config(text=data["response"])
-#     updateImage(data["imageurl"])
-#     manga_var.set("")
+    msg.config(text=data["response"])
+    updateImage(data["imageurl"], image)
+    search_bar.set("")
 
 #To get a recommendation from the given thing
 def getRecommendation(msg, image, search_bar):
@@ -52,3 +54,5 @@ def updateImage(url, imageFrame):
         imageFrame.image = photo   #keeps the image alive in the manga_photo attribute, to avoid garbage collector
     else: 
         print("no images i guess")
+
+import ollama

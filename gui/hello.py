@@ -110,8 +110,8 @@ msg_label = tk.Label(msg_frame,
                     font=('Segoe UI', 11),
                     wraplength=400,
                     justify='left',
-                    padx=20,
-                    pady=20)
+                    padx=10,
+                    pady=10)
 msg_label.pack(fill='both', expand=True)
 
 # Image display area
@@ -130,6 +130,14 @@ manga_photo.pack(expand=True)
 def rec_wrapper():
     gc.getRecommendation(msg_label, manga_photo, manga_var)
 
+def score_wrapper():
+    gc.getScore(msg_label, manga_photo, manga_var)  
+
+def synopsis_wrapper():
+    gc.getSynopsis(msg_label, manga_photo, manga_var)  
+
 get_rec.configure(command=rec_wrapper)
+get_score.configure(command=score_wrapper)
+get_synopsis.configure(command=synopsis_wrapper)
 
 root.mainloop()
