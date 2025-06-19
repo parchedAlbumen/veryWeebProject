@@ -12,24 +12,23 @@ def getSynopsis(msg, image, search_bar, root):
     response = requests.post("http://localhost:3333/skibidiRizzlerSigmaMale", json=dataName) #get response
     data = response.json()
 
-
     updateImage(data["imageurl"], image)
     summarizer.summarizeMangaSynopsis(data["response"], msg, root)
     search_bar.set("")
 
 # #To get score, I am going to get an LLM to summarize this, so it would seem cooler!
-def getScore(msg, image, search_bar):
+def getScore(msg, image, search_bar, root):
     dataName = {"mangaName": search_bar.get()}
     response = requests.post("http://localhost:3333/getScore", json=dataName)
     data = response.json()
 
-    msg.config(text=data["response"])
     updateImage(data["imageurl"], image)
+    summarizer.summarizeMangaScore(data["response"], msg, root)
     search_bar.set("")
 
 #To get a recommendation from the given thing
 def getRecommendation(msg, image, search_bar):
-    dataName = {"mangaName": search_bar.get()}
+    dataName = {"mangaName": getGoodName(search_bar.get())}
     response = requests.post("http://localhost:3333/getRec", json=dataName)
     data = response.json()
 
@@ -49,4 +48,13 @@ def updateImage(url, imageFrame):
     else: 
         print("no images i guess")
 
-import ollama
+#Returns the name of the manga with dashes instead of whitespaces
+def getGoodName(name):
+    newSentence = ""
+    for i in name:
+        if i == " ":
+            newSentence += "-"
+        else:
+            newSentence += i
+
+    return newSentence
