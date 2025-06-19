@@ -134,7 +134,7 @@ def score_wrapper():
     gc.getScore(msg_label, manga_photo, manga_var)  
 
 def synopsis_wrapper():
-    gc.getSynopsis(msg_label, manga_photo, manga_var)  
+    gc.getSynopsis(msg_label, manga_photo, manga_var, root)  
 
 get_rec.configure(command=rec_wrapper)
 get_score.configure(command=score_wrapper)

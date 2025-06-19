@@ -5,14 +5,8 @@ from PIL import Image, ImageTk
 from io import BytesIO
 import quickLLM as summarizer
 
-# #To submit action
-# def submitAction():
-#     mangaName = manga_var.get()
-#     print(f"mangaName: {mangaName}")
-#     manga_var.set("") #hopefully self-explanatory 
-    
 #To get a synopsis of the manga, I am going to add an LLM to get lebron james to summarize this in his own
-def getSynopsis(msg, image, search_bar):
+def getSynopsis(msg, image, search_bar, root):
     dataName = {"mangaName": search_bar.get()}
 
     response = requests.post("http://localhost:3333/skibidiRizzlerSigmaMale", json=dataName) #get response
@@ -20,7 +14,7 @@ def getSynopsis(msg, image, search_bar):
 
 
     updateImage(data["imageurl"], image)
-    summarizer.summarizeMangaSynopsis(data["response"], msg)
+    summarizer.summarizeMangaSynopsis(data["response"], msg, root)
     search_bar.set("")
 
 # #To get score, I am going to get an LLM to summarize this, so it would seem cooler!
