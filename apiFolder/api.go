@@ -56,14 +56,13 @@ func GetMangaScore(data *MangaData, name string) (string, string) {
 		httpreq := "https://api.jikan.moe/v4/manga/" + strconv.Itoa(id) + "/statistics"
 		var scoreData MangaScoreData
 		dataInfo := getScoreStatistic(httpreq, &scoreData) //no need to check if exist or not,, because we can only get something if there's an id
-		infoFormat := ""
+		// infoFormat := ""
 		generateScoreFormat(dataInfo)
-		fmt.Println(infoFormat)
-		infoFormat += ("Completed: " + strconv.Itoa(dataInfo.Completed) + "\n")
+		infoFormat := ("Completed: " + strconv.Itoa(dataInfo.Completed) + "\n")
 		infoFormat += ("Total Users: " + strconv.Itoa(dataInfo.Total) + "\n")
 		averageRating := calculateAverageRating(dataInfo)
 		infoFormat += ("Current Rating: " + strconv.FormatFloat(averageRating, 'f', 2, 64))
-		infoFormat += ("\nPercentage of people that dropped it: ")
+		infoFormat += ("\nPeople that dropped it: " + strconv.Itoa(dataInfo.Dropped))
 		return infoFormat, image_url
 	} else {
 		return "No score", image_url
@@ -83,15 +82,6 @@ func getScoreStatistic(theReq string, data *MangaScoreData) ScoreData {
 	}
 	json.Unmarshal(body, data)
 	return data.Data
-}
-
-func getMangaId(data *MangaData, name string) (int, string) {
-	if theManga := getManga(data, name); len(theManga) > 0 {
-		first := theManga[0]
-		return first.Id, first.Images.Jpg.Image_URL
-	} else {
-		return -1, "no image"
-	}
 }
 
 func getManga(data *MangaData, name string) []Manga {

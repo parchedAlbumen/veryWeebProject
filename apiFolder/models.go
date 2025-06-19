@@ -8,6 +8,7 @@ type Manga struct {
 	Chapters int      `json:"chapters"`
 	Id       int      `json:"mal_id"`
 	Images   JpgPhoto `json:"images"`
+	Members  int      `json:"members"`
 }
 
 type MangaData struct {
@@ -22,8 +23,9 @@ type MangaScore struct {
 
 type ScoreData struct {
 	Completed int          `json:"completed"`
-	Total     int          `json:total"`
-	Scores    []MangaScore `json:scores"` //this is a slice of object: MangaScore
+	Total     int          `json:"total"`
+	Scores    []MangaScore `json:"scores"` //this is a slice of object: MangaScore
+	Dropped   int          `json:"dropped"`
 }
 
 type MangaScoreData struct {
