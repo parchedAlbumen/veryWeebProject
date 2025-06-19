@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"math/rand/v2"
 	"net/http"
 	"strconv"
 )
@@ -16,8 +17,7 @@ func GetRecommendation(data *MangaData, name string) (string, string) {
 		var recommendMangaData MangaRecommendData
 		recManga := getRecData(&recommendMangaData, theReq)
 		if len(recManga) > 0 {
-			first := recManga[0]
-			// fmt.Println("Id:", strconv.Itoa(first.Entry.Id))
+			first := recManga[rand.IntN(10)]
 			fmt.Println("Sending these infos:")
 			fmt.Println("image:", first.Entry.Images.Jpg.Image_URL)
 			fmt.Println("title:", first.Entry.Title)

@@ -12,7 +12,6 @@ def getSynopsis(msg, image, search_bar, root):
     response = requests.post("http://localhost:3333/skibidiRizzlerSigmaMale", json=dataName) #get response
     data = response.json()
 
-
     updateImage(data["imageurl"], image)
     summarizer.summarizeMangaSynopsis(data["response"], msg, root)
     search_bar.set("")
@@ -29,7 +28,7 @@ def getScore(msg, image, search_bar, root):
 
 #To get a recommendation from the given thing
 def getRecommendation(msg, image, search_bar):
-    dataName = {"mangaName": search_bar.get()}
+    dataName = {"mangaName": getGoodName(search_bar.get())}
     response = requests.post("http://localhost:3333/getRec", json=dataName)
     data = response.json()
 
@@ -49,3 +48,13 @@ def updateImage(url, imageFrame):
     else: 
         print("no images i guess")
 
+#Returns the name of the manga with dashes instead of whitespaces
+def getGoodName(name):
+    newSentence = ""
+    for i in name:
+        if i == " ":
+            newSentence += "-"
+        else:
+            newSentence += i
+
+    return newSentence
