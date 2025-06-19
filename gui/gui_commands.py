@@ -18,13 +18,13 @@ def getSynopsis(msg, image, search_bar, root):
     search_bar.set("")
 
 # #To get score, I am going to get an LLM to summarize this, so it would seem cooler!
-def getScore(msg, image, search_bar):
+def getScore(msg, image, search_bar, root):
     dataName = {"mangaName": search_bar.get()}
     response = requests.post("http://localhost:3333/getScore", json=dataName)
     data = response.json()
 
-    msg.config(text=data["response"])
     updateImage(data["imageurl"], image)
+    summarizer.summarizeMangaScore(data["response"], msg, root)
     search_bar.set("")
 
 #To get a recommendation from the given thing
@@ -49,4 +49,3 @@ def updateImage(url, imageFrame):
     else: 
         print("no images i guess")
 
-import ollama

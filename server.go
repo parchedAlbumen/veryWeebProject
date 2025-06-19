@@ -15,16 +15,13 @@ type MangaName struct {
 	MangaName string `json:"mangaName"`
 }
 
+// get root
 func getRoot(w http.ResponseWriter, r *http.Request) {
 	fmt.Printf("got / request\n")
 	io.WriteString(w, "This is my website!\n")
 }
 
-func getHello(w http.ResponseWriter, r *http.Request) {
-	fmt.Printf("got /hello request\n")
-	io.WriteString(w, "Hello, HTTP\n")
-}
-
+// to get a manga recommendation
 func getRecommendation(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
 		var name MangaName
@@ -40,6 +37,7 @@ func getRecommendation(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// to get the score information about a manga
 func getScore(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
 		var name MangaName
@@ -56,6 +54,7 @@ func getScore(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// to get a synopsis of the manga
 func getSynopsis(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
 		fmt.Println("hello world")
@@ -74,7 +73,6 @@ func getSynopsis(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	http.HandleFunc("/", getRoot)
-	http.HandleFunc("/hello", getHello)
 	http.HandleFunc("/skibidiRizzlerSigmaMale", getSynopsis)
 	http.HandleFunc("/getScore", getScore)
 	http.HandleFunc("/getRec", getRecommendation)

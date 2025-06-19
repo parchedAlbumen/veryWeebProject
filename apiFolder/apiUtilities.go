@@ -11,11 +11,7 @@ func calculateAverageRating(info ScoreData) float64 {
 	return float64(sum) / float64(total)
 }
 
-func generateScoreFormat(info ScoreData) string {
-	//do some magic here lol
-	return "hello!"
-}
-
+// Get the id and return the id and the image of the manga
 func getMangaId(data *MangaData, name string) (int, string) {
 	if theManga := getManga(data, name); len(theManga) > 0 {
 		i := getRightMangaNum(theManga)
@@ -26,6 +22,7 @@ func getMangaId(data *MangaData, name string) (int, string) {
 	}
 }
 
+// return the right manga with the most users
 func getRightMangaNum(mangas []Manga) int {
 	curr := 0
 	for i := 1; i < len(mangas); i++ {

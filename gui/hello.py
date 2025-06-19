@@ -20,35 +20,35 @@ root.resizable(False,False)
 style = ttk.Style()
 style.theme_use('clam') #i can't tell if this is changing anything honestly
 
-# # Configure custom styles  ###note: figure these out 
-# style.configure('Title.TLabel',
-#                 background='#2c3e50',
-#                 foreground='#ecf0f1',
-#                 font=('Segoe UI', 24, 'bold'))
+# Configure custom styles  ###note: figure these out 
+style.configure('Title.TLabel',
+                background='#2c3e50',
+                foreground='#ecf0f1',
+                font=('Segoe UI', 24, 'bold'))
 
-# style.configure('Header.TLabel',
-#                 background='#2c3e50',
-#                 foreground='#3498db',
-#                 font=('Segoe UI', 12, 'bold'))
+style.configure('Header.TLabel',
+                background='#2c3e50',
+                foreground='#3498db',
+                font=('Segoe UI', 12, 'bold'))
 
-# style.configure('Info.TLabel',
-#                 background='#34495e',
-#                 foreground='#ecf0f1',
-#                 font=('Segoe UI', 10),
-#                 relief='flat',
-#                 padding=10)
+style.configure('Info.TLabel',
+                background='#34495e',
+                foreground='#ecf0f1',
+                font=('Segoe UI', 10),
+                relief='flat',
+                padding=10)
 
-# style.configure('Modern.TButton',
-#                 font=('Segoe UI', 10, 'bold'),
-#                 padding=10)
+style.configure('Modern.TButton',
+                font=('Segoe UI', 10, 'bold'),
+                padding=10)
 
-# style.map('Modern.TButton',
-#           background=[('active', '#3498db'),
-#                      ('pressed', '#2980b9')])
+style.map('Modern.TButton',
+          background=[('active', '#3498db'),
+                     ('pressed', '#2980b9')])
 
-# style.configure('Search.TEntry',
-#                 font=('Segoe UI', 11),
-#                 padding=5)
+style.configure('Search.TEntry',
+                font=('Segoe UI', 11),
+                padding=5)
 
 # Main frame, similar to a div, its like a container
 main_frame = tk.Frame(root, bg="#353839", padx=30, pady=20)
@@ -131,7 +131,7 @@ def rec_wrapper():
     gc.getRecommendation(msg_label, manga_photo, manga_var)
 
 def score_wrapper():
-    gc.getScore(msg_label, manga_photo, manga_var)  
+    gc.getScore(msg_label, manga_photo, manga_var, root)  
 
 def synopsis_wrapper():
     gc.getSynopsis(msg_label, manga_photo, manga_var, root)  
